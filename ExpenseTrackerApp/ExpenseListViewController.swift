@@ -63,11 +63,22 @@ class ExpenseListViewController: UIViewController, UITableViewDelegate, UITableV
     
     func updateTotalCost() {
         let total = expenses.reduce(0) { $0 + $1.price }
-        totalCost.text = "Total: $\(total)"
+        totalCost.text = "Total Expenses: $\(total)"
     }
     func reloadData() {
         self.fetchExpenses()
     }
+    
+    
+    @IBAction func navigateToChart(_ sender: Any) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = sb.instantiateViewController(withIdentifier: "ChartViewController") as? ChartViewController else {return}
+        vc.expenses2 = self.expenses
+        self.navigationController?.pushViewController(vc, animated: true)
+                
+        
+    }
+    
     
     @IBAction func addExpense(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
