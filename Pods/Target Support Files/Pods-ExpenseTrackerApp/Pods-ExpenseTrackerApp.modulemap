@@ -1,0 +1,6 @@
+framework module Pods_ExpenseTrackerApp {
+  umbrella header "Pods-ExpenseTrackerApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

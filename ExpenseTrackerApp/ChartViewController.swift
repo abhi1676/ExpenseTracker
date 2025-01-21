@@ -25,7 +25,7 @@ class ChartViewController: UIViewController, ChartViewDelegate {
                 configurePieChart()
     }
     override func viewDidLayoutSubviews() {
-        pieChart.frame = CGRect(x: 10, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height-100)
+        pieChart.frame = CGRect(x: 10, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height/2)
         pieChart.center = view.center
         view.addSubview(pieChart)
         
@@ -52,7 +52,7 @@ class ChartViewController: UIViewController, ChartViewDelegate {
             
             let dataSet = PieChartDataSet(entries: entries, label: "")
             
-            dataSet.colors = ChartColorTemplates.material() + ChartColorTemplates.vordiplom()
+            dataSet.colors = ChartColorTemplates.material() 
             pieChart.data = PieChartData(dataSet: dataSet)
             
             pieChart.legend.enabled = true
@@ -62,6 +62,36 @@ class ChartViewController: UIViewController, ChartViewDelegate {
             pieChart.rotationEnabled = true
             pieChart.animate(xAxisDuration: 1.0, easingOption: .easeOutBounce)
         }
+    
+    func saveChartAsImage(chart: UIView) {
+        UIGraphicsBeginImageContextWithOptions(chart.bounds.size, false, 0.0)
+        chart.layer.render(in: UIGraphicsGetCurrentContext()!)
+        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+        } else {
+            UIGraphicsEndImageContext()
+            print("Failed to capture chart as image.")
+        }
+    }
+    
+    @objc func imageSaved(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // Handle the error case
+            print("Error saving image: \(error.localizedDescription)")
+        } else {
+            // Notify user of success
+            print("Image saved successfully to Photos!")
+            print()
+        }
+    }
+
+    
+    
+    @IBAction func downlodChart(_ sender: Any) {
+        saveChartAsImage(chart: pieChart)
+    }
+    
  }
 
  
